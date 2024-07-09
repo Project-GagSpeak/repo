@@ -1,10 +1,21 @@
-
-
-
-
-
-
-
-
-
-
+{
+    "Author": "Cordelia",
+    "Name": "FFStreamViewer",
+    "InternalName": "FFStreamViewer",
+    $10.3.1.4",
+    "Description": "Soon to be Project GagSpeak 4.0, with server-side integration.",
+    "ApplicableVersion": "any",
+    "RepoUrl": "https://github.com/CordeliaMist/FFStreamViewer",
+    "Tags": [
+        "BDSM"
+    ],
+    "DalamudApiLevel": 10,
+    "LoadPriority": 69,
+    "IconUrl": "https://raw.githubusercontent.com/Project-GagSpeak/repo/main/ProjectGagSpeak/images/icon.png",
+    "Punchline": "Enhance your venue experience with embedded livestreams!",
+    "IsHide": "False",
+    "IsTestingExclusive": "False",
+    $10.3.1.4.zip",
+    $10.3.1.4.zip",
+    $10.3.1.4.zip"
+}
