@@ -2,7 +2,7 @@
     "Author": "Cordelia",
     "Name": "FFStreamViewer",
     "InternalName": "FFStreamViewer",
-    $10.3.1.4",
+    "AssemblyVersion": "0.3.1.4",
     "Description": "Soon to be Project GagSpeak 4.0, with server-side integration.",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/CordeliaMist/FFStreamViewer",
@@ -15,9 +15,8 @@
     "Punchline": "Enhance your venue experience with embedded livestreams!",
     "IsHide": "False",
     "IsTestingExclusive": "False",
-    $10.3.1.4.zip",
-    $10.3.1.4.zip",
-    $10.3.1.4.zip"
+    "DownloadLinkInstall": "https://releases.kinkporium.studio/release/0.3.1.4.zip",
+    "DownloadLinkTesting": "https://releases.kinkporium.studio/release/0.3.1.4.zip",
+    "DownloadLinkUpdate": "https://releases.kinkporium.studio/update/0.3.1.4.zip"
 }
-
 
