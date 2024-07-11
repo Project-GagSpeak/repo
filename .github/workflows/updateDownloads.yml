@@ -74,17 +74,21 @@ jobs:
               git commit -m "Automated update of DownloadCount"
               # Step 1: Push your latest changes
               git push origin main
+              echo "pushed to main"
               
               # Step 2: Check if the last two commit messages are the same and should be squashed
               LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
               SECOND_LAST_COMMIT_MSG=$(git log -2 --pretty=%B | tail -n 1)
+              echo "last two commits: $LAST_COMMIT_MSG || SECOND_LAST_COMMIT_MSG"
               
               if [[ "$LAST_COMMIT_MSG" == "$SECOND_LAST_COMMIT_MSG" ]]; then
+                echo "They matched"
                 # Step 3: Squash the last two commits
                 git reset --soft HEAD~2 && 
                 git commit --edit -m"$(git log --format=%B --reverse HEAD..HEAD@{1})"
                 
                 # Push the squashed commit
+                echo "no match, pushing new"
                 git push --force-with-lease origin main
               fi
           fi
