@@ -60,6 +60,14 @@ jobs:
           
           # Use jq to update the download count in the JSON file
           jq --argjson count $DOWNLOAD_COUNT '.[0].DownloadCount = $count' $JSON_FILE > temp.json && mv temp.json $JSON_FILE
+
+      - name: Fetch the most recent tag
+        id: latest-tag
+        run: |
+          git fetch --tags
+          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+          echo "Latest tag fetched: $LATEST_TAG"
+          echo "::set-output name=tag::$LATEST_TAG"
       
       - name: Amend or Create New Commit for Download Count Update
         run: |     
