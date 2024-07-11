@@ -87,7 +87,7 @@ jobs:
               
               # Step 2: Check if the last two commit messages are the same and should be squashed
               LAST_COMMIT_MSG=$(git log -1 --pretty=format:"%s")
-              SECOND_LAST_COMMIT_MSG=$(git log -2 --pretty=format:"%s" | head -n 1)
+              SECOND_LAST_COMMIT_MSG=$(git log -2 --pretty=format:"%s" | tail -n 1)
               echo "last two commits:"
               echo "Latest commit: $LAST_COMMIT_MSG"
               echo "2nd latest commit: $SECOND_LAST_COMMIT_MSG"
