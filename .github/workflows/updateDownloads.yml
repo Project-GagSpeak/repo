@@ -78,9 +78,6 @@ jobs:
           else
               # Create a new commit for the update
               git commit -m "Automated update of DownloadCount"
-              # Step 1: Push your latest changes
-              git push origin main
-              echo "pushed to main"
 
               # Diagnostic commands to check the state of the repo
               echo "Checking the current branch..."
