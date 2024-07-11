@@ -66,7 +66,7 @@ jobs:
           # Diagnostic commands to check the state of the repo
           echo "Checking the current branch..."
           git branch -avv
-          echo "Checking the last commits..."
+          echo "Checking the latest commit prior to pushing our changes"
           git log --oneline -5
           
           # Add changes to staging
@@ -90,7 +90,7 @@ jobs:
               
               # Step 2: Check if the last two commit messages are the same and should be squashed
               LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
-              SECOND_LAST_COMMIT_MSG=$(git log -2 --pretty=%B | tail -n 1)
+              SECOND_LAST_COMMIT_MSG=$(git log -2 --pretty=%B)
               echo "last two commits:"
               echo "Latest commit: $LAST_COMMIT_MSG"
               echo "2nd latest commit: $SECOND_LAST_COMMIT_MSG"
