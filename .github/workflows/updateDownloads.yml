@@ -15,7 +15,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0 # Fetches all history for all branches and tags
+          fetch-depth: 10 # Fetches all history for all branches and tags
+     
+      - name: Configure local Git
+        run: |
+          git fetch --all
+          git checkout main
+          git branch --set-upstream-to=origin/main main
+          
       - name: Disable Strict Host Key Checking for the server
         run: |
           mkdir -p ~/.ssh
@@ -56,12 +63,11 @@ jobs:
       
       - name: Amend or Create New Commit for Download Count Update
         run: |     
-          # Fetch the latest commits and tags
-          git fetch --all
-          
-          # Check the total number of commits in the history
-          COMMIT_COUNT=$(git rev-list --count HEAD)
-          echo "total commits $COMMIT_COUNT"
+          # Diagnostic commands to check the state of the repo
+          echo "Checking the current branch..."
+          git branch -avv
+          echo "Checking the last commits..."
+          git log --oneline -5
           
           # Add changes to staging
           git add projectgagspeak.json
