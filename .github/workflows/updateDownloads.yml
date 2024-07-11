@@ -69,21 +69,25 @@ jobs:
           
           # Add changes to staging
           git add projectgagspeak.json
-          
-          # Determine if the last commit was an automated update
-          if [[ "$LATEST_COMMIT_MESSAGE" == "Automated update of DownloadCount" ]]; then
-            # Amend the last commit without changing its message
-            git commit --amend --no-edit
-            echo "Amended the last commit with the new download count."
-          else
-            # Create a new commit for the update
-            git commit -m "Automated update of DownloadCount"
-            echo "Created a new commit for the download count update."
-          fi
-          
-          # Push the changes, using --force-with-lease for safety
-          git push --force-with-lease origin main
 
+          # Check if there are changes to commit
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            # Determine if the last commit was an automated update
+            if [[ "$LATEST_COMMIT_MESSAGE" == "Automated update of DownloadCount" ]]; then
+              # Amend the last commit without changing its message
+              git commit --amend --no-edit
+              echo "Amended the last commit with the new download count."
+            else
+              # Create a new commit for the update
+              git commit -m "Automated update of DownloadCount"
+              echo "Created a new commit for the download count update."
+            fi
+          
+            # Push the changes, using --force-with-lease for safety
+            git push --force-with-lease origin main
+          fi
         env:
           GIT_COMMITTER_NAME: "GitHub Action"
           GIT_AUTHOR_NAME: "GitHub Action"
