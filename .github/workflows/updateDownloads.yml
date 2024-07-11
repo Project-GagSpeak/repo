@@ -53,36 +53,37 @@ jobs:
           # Use jq to update the download count in the JSON file
           jq --argjson count $DOWNLOAD_COUNT '.[0].DownloadCount = $count' $JSON_FILE > temp.json && mv temp.json $JSON_FILE
       
-      - name: Force Push to Squash Merge with Latest Commit
-        run: |    
+      - name: Amend or Create New Commit for Download Count Update
+        run: |
           # Ensure the local repository is aware of remote changes
           git fetch origin main
-          git reset --soft FETCH_HEAD
+          
+          # Check out the main branch
+          git checkout main
+          
+          # Ensure your local main branch is up to date
+          git reset --hard origin/main
           
           # Get the latest commit message
           LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
-          echo "Latest commit message: $LATEST_COMMIT_MESSAGE"
           
-          # Add updated repo json
+          # Add changes to staging
           git add projectgagspeak.json
           
-          # Check if there are changes to commit
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
+          # Determine if the last commit was an automated update
+          if [[ "$LATEST_COMMIT_MESSAGE" == "Automated update of DownloadCount" ]]; then
+            # Amend the last commit without changing its message
+            git commit --amend --no-edit
+            echo "Amended the last commit with the new download count."
           else
-            # Check if the latest commit message matches "Automated update of DownloadCount"
-            if [ "$LATEST_COMMIT_MESSAGE" = "Automated update of DownloadCount" ]; then
-              echo "The latest commit was an automated update of DownloadCount."
-              # Commit the changes with a specific message to indicate it's ready for squashing
-              git commit --amend --no-edit
-            else
-              echo "The latest commit was not an automated update. Proceeding with the update."
-              # Commit the new changes
-              git commit -m "Automated update of DownloadCount"
-            fi
-              # Push the current commit without squashing
-              git push --force-with-lease origin HEAD:main
+            # Create a new commit for the update
+            git commit -m "Automated update of DownloadCount"
+            echo "Created a new commit for the download count update."
           fi
+          
+          # Push the changes, using --force-with-lease for safety
+          git push --force-with-lease origin main
+
         env:
           GIT_COMMITTER_NAME: "GitHub Action"
           GIT_AUTHOR_NAME: "GitHub Action"
