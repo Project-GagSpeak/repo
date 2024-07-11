@@ -101,6 +101,10 @@ jobs:
                 # Push the squashed commit
                 echo "no match, pushing new"
                 git push --force-with-lease origin main
+              else
+                # Push your latest changes
+                git push origin main
+                echo "pushed to main"
               fi
           fi
         env:
