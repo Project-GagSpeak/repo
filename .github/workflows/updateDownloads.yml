@@ -3,7 +3,7 @@ name: Update Download Counts
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # Runs at the start of every hour
+    - cron: '0 * * * *' # Runs at the start of every hour
   workflow_dispatch: # dispatches 
 
 jobs:
