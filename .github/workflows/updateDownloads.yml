@@ -97,9 +97,7 @@ jobs:
                 # Step 3: Squash the last two commits
                 git reset --soft HEAD~2 && 
                 git commit -m "Automated update of DownloadCount"
-                
                 # Push the squashed commit
-                echo "no match, pushing new"
                 git push --force-with-lease origin main
               else
                 # Push your latest changes
