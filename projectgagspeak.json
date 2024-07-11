@@ -1,0 +1,32 @@
+[
+  {
+    "Author": "Cordelia",
+    "Name": "FFStreamViewer",
+    "InternalName": "FFStreamViewer",
+    "AssemblyVersion": "0.3.1.8",
+    "Description": "Soon to be Project GagSpeak 4.0, with server-side integration.",
+    "ApplicableVersion": "any",
+    "RepoUrl": "https://github.com/CordeliaMist/FFStreamViewer",
+    "Tags": [
+      "BDSM",
+      "Bondage",
+      "GagSpeak",
+      "Speech",
+      "Appearance",
+      "Hardcore",
+      "Pleasure",
+      "Lovense",
+      "Control"
+    ],
+    "DalamudApiLevel": 10,
+    "LoadPriority": 69,
+    "DownloadCount": 42096,
+    "IconUrl": "https://raw.githubusercontent.com/Project-GagSpeak/repo/main/ProjectGagSpeak/images/icon.png",
+    "Punchline": "Enhance your venue experience with embedded livestreams!",
+    "IsHide": "False",
+    "IsTestingExclusive": "False",
+    "DownloadLinkInstall": "https://files.kinkporium.studio/release/0.3.1.8.zip",
+    "DownloadLinkTesting": "https://files.kinkporium.studio/release/0.3.1.8.zip",
+    "DownloadLinkUpdate": "https://files.kinkporium.studio/release/0.3.1.8.zip"
+  }
+]

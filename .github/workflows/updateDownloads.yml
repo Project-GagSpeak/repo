@@ -1,0 +1,90 @@
+# Updates the downloadcounts in the downloadcounts var in the json and updates the reflection to the latest commit as a squashed merge to avoid commit history spam.
+name: Update Download Counts
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # Runs at the start of every hour
+  workflow_dispatch: # dispatches 
+
+jobs:
+  update-download-count:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Disable Strict Host Key Checking for the server
+        run: |
+          mkdir -p ~/.ssh
+          echo "Host ${{ secrets.SSH_PRIVATE_IP }}" > ~/.ssh/config
+          echo "    HostName ${{ secrets.SSH_PRIVATE_IP }}" >> ~/.ssh/config
+          echo "    User root" >> ~/.ssh/config
+          echo "    IdentityFile $(pwd)/ssh_key" >> ~/.ssh/config
+          echo "    StrictHostKeyChecking no" >> ~/.ssh/config
+        env:
+          SSH_PRIVATE_IP: ${{ secrets.SSH_PRIVATE_IP }}
+      
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Fetch download count from server
+        id: fetch-count
+        run: |
+          # Replace with your server details
+          SSH_HOST="${{ secrets.SSH_PRIVATE_IP }}"
+          SSH_USER="root"
+          TARGET_DIR="/var/www/files.kinkporium.studio/downloads"
+          FILE_NAME="downloads.txt"
+          
+          # SSH into the server and fetch the download count
+          DOWNLOAD_COUNT=$(ssh $SSH_USER@$SSH_HOST "cat $TARGET_DIR/$FILE_NAME")
+          echo "Download count fetched: $DOWNLOAD_COUNT"
+          echo "::set-output name=download_count::$DOWNLOAD_COUNT"
+      
+      - name: Update download counts in JSON
+        run: |
+          DOWNLOAD_COUNT=${{ steps.fetch-count.outputs.download_count }}
+          JSON_FILE="projectgagspeak.json"
+          
+          # Use jq to update the download count in the JSON file
+          jq --argjson count $DOWNLOAD_COUNT '.[0].DownloadCount = $count' $JSON_FILE > temp.json && mv temp.json $JSON_FILE
+      
+      - name: Force Push to Squash Merge with Latest Commit
+        run: |    
+          # Ensure the local repository is aware of remote changes
+          git fetch origin main
+          git reset --soft FETCH_HEAD
+          
+          # Get the latest commit message
+          LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")
+          echo "Latest commit message: $LATEST_COMMIT_MESSAGE"
+          
+          # Add updated repo json
+          git add projectgagspeak.json
+          
+          # Check if there are changes to commit
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            # Check if the latest commit message matches "Automated update of DownloadCount"
+            if [ "$LATEST_COMMIT_MESSAGE" = "Automated update of DownloadCount" ]; then
+              echo "The latest commit was an automated update of DownloadCount."
+              # Commit the changes with a specific message to indicate it's ready for squashing
+              git commit --amend --no-edit
+            else
+              echo "The latest commit was not an automated update. Proceeding with the update."
+              # Commit the new changes
+              git commit -m "Automated update of DownloadCount"
+            fi
+              # Push the current commit without squashing
+              git push --force-with-lease origin HEAD:main
+          fi
+        env:
+          GIT_COMMITTER_NAME: "GitHub Action"
+          GIT_AUTHOR_NAME: "GitHub Action"
+          GIT_COMMITTER_EMAIL: "action@github.com"
+          GIT_AUTHOR_EMAIL: "action@github.com"
