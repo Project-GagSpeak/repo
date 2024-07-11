@@ -99,7 +99,7 @@ jobs:
                 echo "They matched"
                 # Step 3: Squash the last two commits
                 git reset --soft HEAD~2 && 
-                git commit --edit -m"$(git log --format=%B --reverse HEAD..HEAD@{1})"
+                git commit -m "Automated update of DownloadCount"
                 
                 # Push the squashed commit
                 echo "no match, pushing new"
