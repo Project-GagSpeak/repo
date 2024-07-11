@@ -14,7 +14,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        
+        with:
+          fetch-depth: 0 # Fetches all history for all branches and tags
       - name: Disable Strict Host Key Checking for the server
         run: |
           mkdir -p ~/.ssh
@@ -54,21 +55,16 @@ jobs:
           jq --argjson count $DOWNLOAD_COUNT '.[0].DownloadCount = $count' $JSON_FILE > temp.json && mv temp.json $JSON_FILE
       
       - name: Amend or Create New Commit for Download Count Update
-        run: |
-          # Ensure the local repository is aware of remote changes
-          git fetch origin main
+        run: |     
+          # Fetch the latest commits and tags
+          git fetch --all
           
-          # Check out the main branch
-          git checkout main
+          # Check the total number of commits in the history
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          echo "total commits $COMMIT_COUNT"
           
-          # Ensure your local main branch is up to date
-          git reset --hard origin/main
-                    
           # Add changes to staging
           git add projectgagspeak.json
-          # Diagnostics: Check if changes are staged
-          git status
-          git diff --cached
           
           # Check if there are changes to commit
           if git diff --cached --quiet; then
