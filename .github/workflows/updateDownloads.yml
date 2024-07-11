@@ -81,6 +81,12 @@ jobs:
               # Step 1: Push your latest changes
               git push origin main
               echo "pushed to main"
+
+              # Diagnostic commands to check the state of the repo
+              echo "Checking the current branch..."
+              git branch -avv
+              echo "Checking the last commits..."
+              git log --oneline -5
               
               # Step 2: Check if the last two commit messages are the same and should be squashed
               LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
