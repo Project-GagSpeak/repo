@@ -3,7 +3,7 @@
     "Author": "Cordelia",
     "Name": "client-primer",
     "InternalName": "client-primer",
-    "AssemblyVersion": "0.3.2.2",
+    "AssemblyVersion": "0.3.2.3",
     "Description": "Soon to be Project GagSpeak 4.0, with server-side integration.",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/Project-GagSpeak/client-primer",
@@ -25,8 +25,9 @@
     "Punchline": "Enhance your venue experience with embedded livestreams!",
     "IsHide": "False",
     "IsTestingExclusive": "False",
-    "DownloadLinkInstall": "https://files.kinkporium.studio/release/0.3.2.2.zip",
-    "DownloadLinkTesting": "https://files.kinkporium.studio/release/0.3.2.2.zip",
-    "DownloadLinkUpdate": "https://files.kinkporium.studio/release/0.3.2.2.zip"
+    "DownloadLinkInstall": "https://files.kinkporium.studio/release/0.3.2.3.zip",
+    "DownloadLinkTesting": "https://files.kinkporium.studio/release/0.3.2.3.zip",
+    "DownloadLinkUpdate": "https://files.kinkporium.studio/release/0.3.2.3.zip"
   }
 ]
+
