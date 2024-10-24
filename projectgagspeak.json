@@ -20,7 +20,7 @@
     ],
     "DalamudApiLevel": 10,
     "LoadPriority": 69,
-    "DownloadCount": 35323,
+    "DownloadCount": 35336,
     "IconUrl": "https://raw.githubusercontent.com/Project-GagSpeak/repo/main/ProjectGagSpeak/images/icon.png",
     "Punchline": "Enhance your venue experience with embedded livestreams!",
     "IsHide": "False",
@@ -30,5 +30,3 @@
     "DownloadLinkUpdate": "https://files.kinkporium.studio/release/0.9.6.1.zip"
   }
 ]
-
-
