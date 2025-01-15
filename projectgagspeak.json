@@ -21,7 +21,7 @@
     ],
     "DalamudApiLevel": 11,
     "LoadPriority": 69,
-    "DownloadCount": 80304,
+    "DownloadCount": 80452,
     "IconUrl": "https://raw.githubusercontent.com/Project-GagSpeak/repo/main/ProjectGagSpeak/images/icon.png",
     "IsHide": "False",
     "IsTestingExclusive": "False",
@@ -30,4 +30,3 @@
     "DownloadLinkUpdate": "https://files.kinkporium.studio/release/1.2.1.0.zip"
   }
 ]
-
