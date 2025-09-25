@@ -46,7 +46,7 @@ jobs:
           SSH_HOST="${{ secrets.SSH_PRIVATE_IP }}"
           SSH_USER="root"
           TARGET_DIR="/var/www/files.kinkporium.studio/downloads"
-          FILE_NAME="downloads.txt"
+          FILE_NAME="downloads_gagspeak.txt"
           
           # SSH into the server and fetch the download count
           DOWNLOAD_COUNT=$(ssh $SSH_USER@$SSH_HOST "cat $TARGET_DIR/$FILE_NAME")
