@@ -15,9 +15,9 @@
     "IconUrl": "https://raw.githubusercontent.com/Project-GagSpeak/repo/main/ProjectGagSpeak/images/icon.png",
     "IsHide": "False",
     "IsTestingExclusive": "False",
-    "DownloadLinkInstall": "https://files.kinkporium.studio/release/2.0.1.1.zip",
-    "DownloadLinkTesting": "https://files.kinkporium.studio/release/2.0.1.1.zip",
-    "DownloadLinkUpdate": "https://files.kinkporium.studio/release/2.0.1.1.zip"
+    "DownloadLinkInstall": "https://files.kinkporium.studio/releases/gagspeak/2.0.1.1.zip",
+    "DownloadLinkTesting": "https://files.kinkporium.studio/releases/gagspeak/2.0.1.1.zip",
+    "DownloadLinkUpdate": "https://files.kinkporium.studio/releases/gagspeak/2.0.1.1.zip"
   }
 ]
 
