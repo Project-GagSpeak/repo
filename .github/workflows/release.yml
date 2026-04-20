@@ -1,0 +1,104 @@
+name: release
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          repository: Project-GagSpeak/client
+          path: gs
+          submodules: "recursive"
+          fetch-tags: "true"
+      - uses: actions/checkout@v6
+        name: Checkout Dalamud custom repository
+        with:
+          path: repo
+      - name: Get Version
+        id: get_version
+        run: |
+          cd gs
+          # Try to get version number from the CSProj file and load it for later steps.
+          $out = ([xml](Get-Content './ProjectGagSpeak/ProjectGagSpeak.csproj')).Project.PropertyGroup.Version
+          Write-Output "Parsed version `"$out`" from ProjectGagSpeak.csproj."
+          Write-Output "ver=$out".Trim() | Out-File -FilePath "$env:GITHUB_OUTPUT" -Encoding ascii
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "10.x.x"
+      - name: Restore Dependencies
+        run: |
+          cd gs
+          dotnet restore
+      - name: Fetch Dalamud
+        run: |
+          cd gs
+          # Fetch current stable Dalamud assets.
+          Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
+          Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev"
+      - name: Build
+        run: |
+          cd gs
+          dotnet build --no-restore --configuration Release --nologo
+      - name: Check for Release
+        id: check_release_needed
+        env:
+          VER_STRING: ${{ steps.get_version.outputs.ver }}
+        run: |
+          cd repo
+          # Check if version has updated to see if we need to package a new release.
+          $ver = $env:VER_STRING.Trim()
+          $newtag = 0
+          if (-not [bool](git tag -l $ver)) {
+          Write-Output "::notice::Tag `"ver`" was not found, creating a new release."
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a $ver -m "[CI] Tagging new version."
+          git push --tags
+          $newtag = 1
+          } else {
+          Write-Output "::notice::No new release required, skipping further steps"
+          }
+          Write-Output "::debug::New tag needed: $newtag"
+          Write-Output "newtag=$newtag" | Out-File -FilePath "$env:GITHUB_OUTPUT"
+      - name: Create Release
+        if: ${{ steps.check_release_needed.outputs.newtag == true }}
+        id: create_release
+        uses: softprops/action-gh-release@v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.ver }}
+          working_directory: gs/ProjectGagSpeak/bin/x64/Release/ProjectGagSpeak
+          files: latest.zip
+          name: ProjectGagSpeak v${{ steps.get_version.outputs.ver }}
+      - name: Update repo.json
+        if: ${{ steps.check_release_needed.outputs.newtag == true }}
+        run: |
+          cd repo
+          # Get and update the current repo.json
+          $ver = '${{ steps.get_version.outputs.ver }}'
+          $path = './projectgagspeak.json'
+          $downloadUri = '${{ fromJSON(steps.create_release.outputs.assets)[0].browser_download_url }}'
+          $json = Get-Content -Raw $path | ConvertFrom-Json
+          $json[0].AssemblyVersion = $ver
+          $json[0].DownloadLinkInstall = $downloadUri
+          $json[0].DownloadLinkUpdate = $downloadUri
+          $json[0].DownloadLinkTesting = $downloadUri
+          $content = $json | ConvertTo-Json -AsArray
+          set-content -Path $path -Value $content
+      - name: Commit repo.json
+        if: ${{ steps.check_release_needed.outputs.newtag == true }}
+        run: |
+          cd repo
+          # Commit repo.json changes.
+          git config --unset-all http.https://github.com/.extraheader
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add projectgagspeak.json
+          git commit -m "[CI] Updating projectgagspeak.json for ${{ steps.get_version.outputs.ver }}`n`nskip-checks:true" || true
+          git push origin main
